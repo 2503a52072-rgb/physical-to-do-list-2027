@@ -1,0 +1,1040 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physical To-Do List Dashboard</title>
+
+<style>
+:root {
+    --bg: #f4f6fb;
+    --panel: #ffffff;
+    --ink: #1c2742;
+    --muted: #78839b;
+    --line: #e8ecf4;
+    --purple: #6658e8;
+    --green: #21a879;
+    --red: #e16a62;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px Arial, sans-serif;
+}
+
+.wrap {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 26px;
+}
+
+.top {
+    height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    height: 42px;
+    width: 42px;
+    border-radius: 13px;
+    background: var(--purple);
+    color: white;
+    display: grid;
+    place-items: center;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.brand h1 {
+    font-size: 19px;
+    margin: 0;
+}
+
+.brand small {
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+}
+
+.date {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.hero {
+    padding: 35px 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.8px;
+    font-weight: bold;
+    color: var(--purple);
+}
+
+h2 {
+    font-size: 32px;
+    margin: 8px 0;
+}
+
+.hero p {
+    color: var(--muted);
+}
+
+.btn {
+    border: 0;
+    border-radius: 9px;
+    padding: 11px 15px;
+    background: var(--purple);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 12px 0 18px;
+}
+
+.stat, .panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 15px;
+    box-shadow: 0 12px 35px #26365b0b;
+}
+
+.stat {
+    padding: 18px;
+}
+
+.stat label {
+    display: block;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.stat strong {
+    display: block;
+    font-size: 29px;
+    margin: 8px 0 4px;
+}
+
+.stat small {
+    color: var(--muted);
+}
+
+.progress {
+    height: 5px;
+    background: #eceefa;
+    border-radius: 9px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+
+.progress div {
+    height: 100%;
+    background: var(--purple);
+    width: 0;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 17px;
+}
+
+.panel {
+    padding: 20px;
+}
+
+.panel h3 {
+    margin: 6px 0 18px;
+    font-size: 18px;
+}
+
+label {
+    display: block;
+    font-size: 11px;
+    font-weight: bold;
+    margin: 13px 0 6px;
+}
+
+input, select, textarea {
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px;
+    font: 13px Arial;
+    color: var(--ink);
+    background: #fcfcff;
+}
+
+textarea {
+    resize: vertical;
+}
+
+.two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.submit {
+    width: 100%;
+    margin-top: 17px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.toolbar input {
+    flex: 1;
+}
+
+.filters {
+    display: flex;
+    gap: 7px;
+    margin: 12px 0 15px;
+}
+
+.filter {
+    border: 0;
+    border-radius: 7px;
+    background: #f1f2f8;
+    color: var(--muted);
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.filter.active {
+    background: #eeedff;
+    color: var(--purple);
+    font-weight: bold;
+}
+
+.task {
+    display: grid;
+    grid-template-columns: 22px 1fr auto;
+    gap: 10px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+}
+
+.task input {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: var(--purple);
+}
+
+.task-title {
+    font-weight: bold;
+}
+
+.task.done .task-title {
+    text-decoration: line-through;
+    color: #9ca5b5;
+}
+
+.desc {
+    font-size: 11px;
+    color: var(--muted);
+    margin: 5px 0;
+}
+
+.meta {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.tag {
+    padding: 4px 7px;
+    border-radius: 5px;
+    background: #f0f1f7;
+}
+
+.High {
+    background: #fff0ed;
+    color: #c85449;
+}
+
+.Low {
+    background: #eaf8f1;
+    color: #21865f;
+}
+
+.actions button {
+    border: 0;
+    background: #f2f3f8;
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-left: 3px;
+    cursor: pointer;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 35px;
+}
+
+.bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 17px;
+    margin: 17px 0 28px;
+}
+
+.priority-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+}
+
+.focus {
+    text-align: center;
+}
+
+.timer {
+    font-size: 38px;
+    font-weight: bold;
+    margin: 12px;
+}
+
+.focus button {
+    margin: 3px;
+}
+
+.footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 10px;
+    padding: 15px;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c2742;
+    color: white;
+    padding: 11px 16px;
+    border-radius: 8px;
+    display: none;
+}
+
+@media(max-width:800px) {
+    .wrap {
+        padding: 0 14px;
+    }
+
+    .layout {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bottom {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        align-items: start;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    .date {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<header class="top">
+    <div class="brand">
+        <div class="logo">✓</div>
+        <div>
+            <h1>TaskFlow</h1>
+            <small>PHYSICAL TO-DO LIST</small>
+        </div>
+    </div>
+    <div class="date" id="today"></div>
+</header>
+
+<section class="hero">
+    <div>
+        <div class="eyebrow">YOUR PERSONAL WORKSPACE</div>
+        <h2>My Dashboard</h2>
+        <p>Plan your tasks, set priorities and track your progress.</p>
+    </div>
+    <button class="btn"
+        onclick="document.getElementById('title').focus()">
+        + Add a task
+    </button>
+</section>
+
+<!-- DASHBOARD STATISTICS -->
+
+<section class="stats">
+
+    <div class="stat">
+        <label>TOTAL TASKS</label>
+        <strong id="total">0</strong>
+        <small>All tasks in your list</small>
+    </div>
+
+    <div class="stat">
+        <label>TODAY'S TASKS</label>
+        <strong id="todayCount">0</strong>
+        <small>Due today</small>
+    </div>
+
+    <div class="stat">
+        <label>COMPLETED</label>
+        <strong id="done">0</strong>
+        <small>Tasks finished</small>
+    </div>
+
+    <div class="stat">
+        <label>OVERALL PROGRESS</label>
+        <strong id="percent">0%</strong>
+        <small>Completion rate</small>
+        <div class="progress">
+            <div id="bar"></div>
+        </div>
+    </div>
+
+</section>
+
+<main class="layout">
+
+<!-- ADD TASK FORM -->
+
+<section class="panel">
+
+    <div class="eyebrow">PLAN YOUR WORK</div>
+    <h3 id="formTitle">Create a new task</h3>
+
+    <form id="form">
+
+        <label>Task title *</label>
+        <input id="title" required maxlength="90"
+            placeholder="e.g. Complete project report">
+
+        <label>Description</label>
+        <textarea id="description" rows="3"
+            placeholder="Add task details..."></textarea>
+
+        <div class="two">
+
+            <div>
+                <label>Category</label>
+                <select id="category">
+                    <option>Study</option>
+                    <option>Personal</option>
+                    <option>Work</option>
+                    <option>Project</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Priority</label>
+                <select id="priority">
+                    <option>High</option>
+                    <option selected>Medium</option>
+                    <option>Low</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="two">
+
+            <div>
+                <label>Due date</label>
+                <input id="due" type="date">
+            </div>
+
+            <div>
+                <label>Time estimate</label>
+                <select id="estimate">
+                    <option>15 min</option>
+                    <option>30 min</option>
+                    <option>1 hour</option>
+                    <option>2 hours</option>
+                    <option>3+ hours</option>
+                </select>
+            </div>
+
+        </div>
+
+        <button class="btn submit" id="save">
+            + Save task
+        </button>
+
+        <button type="button" class="filter"
+            id="cancel"
+            style="width:100%;margin-top:7px;display:none">
+            Cancel edit
+        </button>
+
+    </form>
+
+</section>
+
+<!-- TASK MANAGEMENT -->
+
+<section class="panel">
+
+    <div class="eyebrow">STAY ON TRACK</div>
+    <h3>Task Management</h3>
+
+    <div class="toolbar">
+        <input id="search" placeholder="Search tasks...">
+
+        <select id="sort" style="max-width:145px">
+            <option value="date">Sort by due date</option>
+            <option value="priority">Sort by priority</option>
+            <option value="new">Newest first</option>
+        </select>
+    </div>
+
+    <div class="filters">
+        <button class="filter active" data-filter="all">
+            All
+        </button>
+
+        <button class="filter" data-filter="pending">
+            Remaining
+        </button>
+
+        <button class="filter" data-filter="done">
+            Completed
+        </button>
+    </div>
+
+    <div id="list"></div>
+
+    <div class="empty" id="empty">
+        No tasks yet. Create your first task!
+    </div>
+
+</section>
+
+</main>
+
+<!-- PRIORITY AND TIMER -->
+
+<section class="bottom">
+
+    <div class="panel">
+
+        <div class="eyebrow">PRIORITY OVERVIEW</div>
+        <h3>Tasks by priority</h3>
+
+        <div class="priority-row">
+            <span>High priority</span>
+            <b id="high">0</b>
+        </div>
+
+        <div class="priority-row">
+            <span>Medium priority</span>
+            <b id="medium">0</b>
+        </div>
+
+        <div class="priority-row">
+            <span>Low priority</span>
+            <b id="low">0</b>
+        </div>
+
+    </div>
+
+    <div class="panel focus">
+
+        <div class="eyebrow">FOCUS SESSION</div>
+        <h3>Deep Work Timer</h3>
+
+        <div class="timer" id="timer">25:00</div>
+
+        <button class="btn" id="start">Start</button>
+        <button class="filter" id="pause">Pause</button>
+        <button class="filter" id="reset">Reset</button>
+
+        <p style="color:var(--muted);font-size:11px">
+            Use a focused 25-minute work session.
+        </p>
+
+    </div>
+
+</section>
+
+<div class="footer">
+    TaskFlow · Physical To-Do List · Website Dashboard
+</div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+// 1. LOCAL STORAGE
+
+const KEY = 'taskflow_dashboard_tasks_v2';
+
+let tasks = [];
+
+try {
+    tasks = JSON.parse(localStorage.getItem(KEY) || '[]');
+
+    if (!Array.isArray(tasks)) {
+        tasks = [];
+    }
+} catch(e) {
+    tasks = [];
+}
+
+let filter = 'all';
+let editing = null;
+let seconds = 1500;
+let tick = null;
+
+// 2. GET ELEMENT BY ID
+
+const $ = id => document.getElementById(id);
+
+$('today').textContent = new Date().toLocaleDateString(
+    undefined,
+    {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    }
+);
+
+// 3. GENERATE UNIQUE ID
+
+function makeId() {
+    return (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : 'task-' + Date.now() + '-' +
+          Math.random().toString(36).slice(2,10);
+}
+
+// 4. SAVE DATA
+
+function saveData() {
+    try {
+        localStorage.setItem(KEY, JSON.stringify(tasks));
+        render();
+    } catch(e) {
+        alert('Browser storage is unavailable or full.');
+    }
+}
+
+// 5. SHOW MESSAGE
+
+function toast(message) {
+    $('toast').textContent = message;
+    $('toast').style.display = 'block';
+
+    setTimeout(() => {
+        $('toast').style.display = 'none';
+    }, 1800);
+}
+
+// 6. RESET FORM
+
+function resetForm() {
+    editing = null;
+    $('form').reset();
+
+    $('formTitle').textContent = 'Create a new task';
+    $('save').textContent = '+ Save task';
+    $('cancel').style.display = 'none';
+}
+
+// 7. ADD AND UPDATE TASK
+
+$('form').onsubmit = function(e) {
+
+    e.preventDefault();
+
+    let item = {
+        title: $('title').value.trim(),
+        description: $('description').value.trim(),
+        category: $('category').value,
+        priority: $('priority').value,
+        due: $('due').value,
+        estimate: $('estimate').value
+    };
+
+    if(editing) {
+
+        tasks = tasks.map(t =>
+            t.id === editing ? {...t, ...item} : t
+        );
+
+        toast('Task updated');
+
+    } else {
+
+        tasks.unshift({
+            id: makeId(),
+            ...item,
+            completed: false,
+            created: Date.now()
+        });
+
+        toast('Task added');
+    }
+
+    resetForm();
+    saveData();
+};
+
+// 8. CANCEL EDIT
+
+$('cancel').onclick = resetForm;
+
+// 9. EDIT TASK
+
+window.editTask = function(id) {
+
+    let t = tasks.find(x => x.id === id);
+
+    if(!t) return;
+
+    editing = id;
+
+    [
+        'title',
+        'description',
+        'category',
+        'priority',
+        'due',
+        'estimate'
+    ].forEach(k => {
+        $(k).value = t[k] || '';
+    });
+
+    $('formTitle').textContent = 'Edit task';
+    $('save').textContent = 'Save changes';
+    $('cancel').style.display = 'block';
+
+    $('title').focus();
+};
+
+// 10. DELETE TASK
+
+window.delTask = function(id) {
+
+    if(confirm('Delete this task?')) {
+
+        tasks = tasks.filter(t => t.id !== id);
+
+        saveData();
+
+        toast('Task deleted');
+    }
+};
+
+// 11. COMPLETE TASK
+
+window.toggleTask = function(id, value) {
+
+    tasks = tasks.map(t =>
+        t.id === id ? {...t, completed: value} : t
+    );
+
+    saveData();
+};
+
+// 12. ESCAPE USER INPUT
+
+function esc(s) {
+
+    return String(s || '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+    }[c]));
+}
+
+// 13. DISPLAY TASKS AND DASHBOARD
+
+function render() {
+
+    let done = tasks.filter(t => t.completed).length;
+
+    let today = (
+        d => d.getFullYear() + '-' +
+        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0')
+    )(new Date());
+
+    $('total').textContent = tasks.length;
+
+    $('done').textContent = done;
+
+    $('todayCount').textContent =
+        tasks.filter(t => t.due === today).length;
+
+    let pct = tasks.length
+        ? Math.round(done / tasks.length * 100)
+        : 0;
+
+    $('percent').textContent = pct + '%';
+    $('bar').style.width = pct + '%';
+
+    ['High', 'Medium', 'Low'].forEach(p => {
+
+        $(p.toLowerCase()).textContent =
+            tasks.filter(t =>
+                t.priority === p && !t.completed
+            ).length;
+    });
+
+    // SEARCH AND FILTER
+
+    let q = $('search').value.toLowerCase();
+
+    let a = tasks.filter(t =>
+
+        (
+            filter === 'all' ||
+            (filter === 'done'
+                ? t.completed
+                : !t.completed)
+        ) &&
+
+        (
+            t.title + ' ' +
+            t.description + ' ' +
+            t.category
+        ).toLowerCase().includes(q)
+    );
+
+    // SORT TASKS
+
+    let sort = $('sort').value;
+
+    if(sort === 'priority') {
+
+        let rank = {
+            High: 0,
+            Medium: 1,
+            Low: 2
+        };
+
+        a.sort((x, y) =>
+            rank[x.priority] - rank[y.priority]
+        );
+
+    } else if(sort === 'date') {
+
+        a.sort((x, y) =>
+            (x.due || '9999').localeCompare(y.due || '9999')
+        );
+
+    } else {
+
+        a.sort((x, y) => y.created - x.created);
+    }
+
+    // DISPLAY TASK LIST
+
+    $('empty').style.display =
+        a.length ? 'none' : 'block';
+
+    $('list').innerHTML = a.map(t => `
+
+        <div class="task ${t.completed ? 'done' : ''}">
+
+            <input
+                type="checkbox"
+                ${t.completed ? 'checked' : ''}
+                onchange="toggleTask('${t.id}',this.checked)"
+            >
+
+            <div>
+
+                <div class="task-title">
+                    ${esc(t.title)}
+                </div>
+
+                ${t.description
+                    ? `<div class="desc">${esc(t.description)}</div>`
+                    : ''
+                }
+
+                <div class="meta">
+
+                    <span class="tag">
+                        ${esc(t.category)}
+                    </span>
+
+                    <span class="tag ${esc(t.priority)}">
+                        ${esc(t.priority)} priority
+                    </span>
+
+                    ${t.due
+                        ? `<span class="tag">Due ${esc(t.due)}</span>`
+                        : ''
+                    }
+
+                    <span>${esc(t.estimate)}</span>
+
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <button onclick="editTask('${t.id}')">
+                    Edit
+                </button>
+
+                <button onclick="delTask('${t.id}')">
+                    ×
+                </button>
+
+            </div>
+
+        </div>
+
+    `).join('');
+}
+
+// 14. FILTER BUTTONS
+
+document.querySelectorAll('[data-filter]').forEach(b => {
+
+    b.onclick = () => {
+
+        filter = b.dataset.filter;
+
+        document.querySelectorAll('[data-filter]')
+            .forEach(x =>
+                x.classList.toggle('active', x === b)
+            );
+
+        render();
+    };
+});
+
+// 15. SEARCH AND SORT EVENTS
+
+$('search').oninput = render;
+
+$('sort').onchange = render;
+
+// 16. FOCUS TIMER
+
+function showTimer() {
+
+    $('timer').textContent =
+
+        String(Math.floor(seconds / 60)).padStart(2, '0')
+        + ':' +
+
+        String(seconds % 60).padStart(2, '0');
+}
+
+// START TIMER
+
+$('start').onclick = () => {
+
+    if(tick) return;
+
+    tick = setInterval(() => {
+
+        if(seconds > 0) {
+
+            seconds--;
+
+            showTimer();
+
+        } else {
+
+            clearInterval(tick);
+            tick = null;
+
+            toast('Focus session complete! Take a short break.');
+        }
+
+    }, 1000);
+};
+
+// PAUSE TIMER
+
+$('pause').onclick = () => {
+
+    clearInterval(tick);
+    tick = null;
+};
+
+// RESET TIMER
+
+$('reset').onclick = () => {
+
+    clearInterval(tick);
+
+    tick = null;
+    seconds = 1500;
+
+    showTimer();
+};
+
+// 17. INITIAL DISPLAY
+
+render();
+showTimer();
+
+</script>
+
+</body>
+</html>
